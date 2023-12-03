@@ -31,10 +31,6 @@ class SettingsFragment : Fragment() {
 
         (activity as AppCompatActivity).supportActionBar?.hide()
 
-        val textView: TextView = binding.textSettings
-        homeViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
         return root
     }
 

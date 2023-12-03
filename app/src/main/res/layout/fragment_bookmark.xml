@@ -1,15 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/MenuTheme.CapstoneProject"
     tools:context=".ui.bookmark.BookmarkFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/textBookmark"
+    <com.google.android.material.search.SearchBar
+        android:id="@+id/searchBar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:backgroundTint="@color/white"
+        android:hint="@string/search_bar_hint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIconTint="@color/gray"
+        app:strokeColor="@color/gray"
+        app:strokeWidth="1dp"
+        app:subtitleTextColor="@color/gray" />
 
-</FrameLayout>
+    <com.google.android.material.search.SearchView
+        android:id="@+id/searchView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_anchor="@id/searchBar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_bookmark"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:padding="8dp" />
+    </com.google.android.material.search.SearchView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

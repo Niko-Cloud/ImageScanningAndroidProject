@@ -27,4 +27,6 @@
     <string name="z_a">Z-A</string>
     <string name="description">Description</string>
     <string name="how_to_use">How To Use</string>
+    <string name="about_us">About Us</string>
+    <string name="made_by">Made By :</string>
 </resources>
