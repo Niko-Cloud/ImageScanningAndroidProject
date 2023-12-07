@@ -26,14 +26,25 @@ class HomeAdapter : ListAdapter<EquipmentResponseItem, HomeAdapter.MyViewHolder>
     class MyViewHolder( private val binding: ItemFragmentToolsBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(equipment: EquipmentResponseItem) {
             binding.tvItem.text = equipment.name
-
+            val targetMuscle = equipment.targetMuscles
+            val array = ArrayList(targetMuscle ?: listOf())
             Glide.with(binding.root)
                 .load(equipment.equipmentImage)
                 .into(binding.ivItem)
 
             itemView.setOnClickListener {
                 val intent = Intent(itemView.context, DetailActivity::class.java)
-                intent.putExtra(EQUIPMENT_ID, equipment.equipmentId)
+
+                intent.apply {
+                    putExtra(EQUIPMENT_ID, equipment.equipmentId)
+                    putExtra(NAME, equipment.name)
+                    putExtra(EQUIPMENT_IMAGE, equipment.equipmentImage)
+                    putExtra(DESCRIPTION, equipment.description)
+                    putExtra(TARGET_MUSCLE, array)
+                    putExtra(TUTORIAL, equipment.tutorial)
+                    putExtra(VIDEO_TUTORIAL_LINK, equipment.videoTutorialLink)
+                }
+
 //
 //                val optionsCompat: ActivityOptionsCompat =
 //                    ActivityOptionsCompat.makeSceneTransitionAnimation(
@@ -63,5 +74,11 @@ class HomeAdapter : ListAdapter<EquipmentResponseItem, HomeAdapter.MyViewHolder>
         }
 
         const val EQUIPMENT_ID = "equipment_id"
+        const val NAME = "name"
+        const val DESCRIPTION = "description"
+        const val EQUIPMENT_IMAGE = "equipment_image"
+        const val TUTORIAL = "tutorial"
+        const val TARGET_MUSCLE = "target_muscle"
+        const val VIDEO_TUTORIAL_LINK = "video_tutorial_link"
     }
 }

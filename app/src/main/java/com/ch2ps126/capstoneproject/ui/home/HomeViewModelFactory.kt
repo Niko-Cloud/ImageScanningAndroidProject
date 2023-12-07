@@ -27,7 +27,7 @@ class HomeViewModelFactory(private val repository: EquipmentRepository) :
         fun getInstance(context: Context): HomeViewModelFactory {
             if (INSTANCE == null) {
                 synchronized(HomeViewModelFactory::class.java) {
-                    INSTANCE = HomeViewModelFactory(Injection.provideRepository(context))
+                    INSTANCE = HomeViewModelFactory(Injection.provideEquipmentRepository(context))
                 }
             }
             return INSTANCE as HomeViewModelFactory

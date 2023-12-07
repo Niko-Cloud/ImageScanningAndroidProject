@@ -1,15 +1,29 @@
 package com.ch2ps126.capstoneproject.ui.detail
 
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.OnBackPressedDispatcher
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.ch2ps126.capstoneproject.R
+import com.ch2ps126.capstoneproject.data.local.db.entity.Bookmark
 import com.ch2ps126.capstoneproject.databinding.ActivityDetailBinding
+import com.ch2ps126.capstoneproject.ui.home.HomeAdapter.Companion.DESCRIPTION
 import com.ch2ps126.capstoneproject.ui.home.HomeAdapter.Companion.EQUIPMENT_ID
+import com.ch2ps126.capstoneproject.ui.home.HomeAdapter.Companion.EQUIPMENT_IMAGE
+import com.ch2ps126.capstoneproject.ui.home.HomeAdapter.Companion.NAME
+import com.ch2ps126.capstoneproject.ui.home.HomeAdapter.Companion.TARGET_MUSCLE
+import com.ch2ps126.capstoneproject.ui.home.HomeAdapter.Companion.TUTORIAL
+import com.ch2ps126.capstoneproject.ui.home.HomeAdapter.Companion.VIDEO_TUTORIAL_LINK
 import com.google.android.material.chip.Chip
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.invoke
 import kotlinx.coroutines.launch
 
 class DetailActivity : AppCompatActivity() {
@@ -24,36 +38,59 @@ class DetailActivity : AppCompatActivity() {
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val equipmentID = intent.getIntExtra(EQUIPMENT_ID, 0)
-
         supportActionBar?.hide()
+
+        val equipmentId = intent.getIntExtra(EQUIPMENT_ID, 0)
+        val name = intent.getStringExtra(NAME)
+        val equipmentImage = intent.getStringExtra(EQUIPMENT_IMAGE)
+        val description = intent.getStringExtra(DESCRIPTION)
+        val tutorial = intent.getStringExtra(TUTORIAL)
+        val videoTutorialLink = intent.getStringExtra(VIDEO_TUTORIAL_LINK)
+        val targetMuscles: ArrayList<String?>? = intent.getStringArrayListExtra(TARGET_MUSCLE)
+
+
+
+        binding.tvTitle.text = name
+        binding.tvDescriptionDetail.text = description
+        binding.tvHowToUse.text = tutorial
+        Glide.with(this@DetailActivity)
+            .load(equipmentImage)
+            .into(binding.ivTools)
+        if (targetMuscles != null) {
+            for (tag in targetMuscles) {
+                val chip = Chip(this@DetailActivity)
+                chip.text = tag
+                binding.chipGroup.addView(chip)
+            }
+        }
+        binding.tvLinkVideo.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse(videoTutorialLink)
+            startActivity(intent)
+        }
 
         binding.ivBack.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        binding.ivBookmark.setOnClickListener{
-
-        }
-
-        lifecycleScope.launch {
-            viewModel.getEquipmentById(equipmentID)
-            viewModel.equipmentData.observe(this@DetailActivity) { equipment ->
-                equipment?.let {
-                    binding.tvTitle.text = equipment.name
-                    binding.tvDescriptionDetail.text = equipment.description
-                    binding.tvHowToUse.text = equipment.tutorial
-                    Glide.with(this@DetailActivity)
-                        .load(equipment.equipmentImage)
-                        .into(binding.ivTools)
-                    for (tag in equipment.targetMuscles!!){
-                        val chip = Chip(this@DetailActivity)
-                        chip.text = tag
-                        binding.chipGroup.addView(chip)
-                    }
+        viewModel.getBookmarkExists(equipmentId).observe(this) { curr ->
+            Log.d("DetailActivity", "curr: $curr")
+            val newBookmark = Bookmark(
+                id = equipmentId,
+                name = name,
+                equipmentImage = equipmentImage,
+            )
+            binding.ivBookmark.setImageResource(
+                if (curr) R.drawable.bookmark_button_filled else R.drawable.bookmark_button_outline
+            )
+            binding.ivBookmark.setOnClickListener {
+                if (curr) {
+                    viewModel.deleteBookmark(equipmentId)
+                } else {
+                    viewModel.insertBookmark(newBookmark)
                 }
             }
-        }
 
+        }
     }
 }
