@@ -23,6 +23,7 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import com.ch2ps126.capstoneproject.databinding.ActivityCameraBinding
+import com.ch2ps126.capstoneproject.ui.result.ResultActivity
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -95,7 +96,6 @@ class CameraActivity : AppCompatActivity() {
         return File.createTempFile(timestamp, ".jpg", filesDir)
     }
 
-
     private fun takePhoto() {
         val imageCapture = imageCapture ?: return
         val photoFile = createCustomTempFile(application)
@@ -105,10 +105,10 @@ class CameraActivity : AppCompatActivity() {
             ContextCompat.getMainExecutor(this),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
-                    val intent = Intent()
+                    val intent = Intent(this@CameraActivity, ResultActivity::class.java)
                     intent.putExtra(EXTRA_CAMERAX_IMAGE, output.savedUri.toString())
-                    setResult(CAMERAX_RESULT, intent)
-                    finish()
+                    setResult(CAMERAX_RESULT)
+                    startActivity(intent)
                 }
 
                 override fun onError(exc: ImageCaptureException) {

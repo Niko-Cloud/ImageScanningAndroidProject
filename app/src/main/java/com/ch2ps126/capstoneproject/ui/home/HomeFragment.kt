@@ -1,32 +1,27 @@
 package com.ch2ps126.capstoneproject.ui.home
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.ContextMenu
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
 import com.ch2ps126.capstoneproject.R
 import com.ch2ps126.capstoneproject.databinding.FragmentHomeBinding
 import com.google.android.material.search.SearchBar
+import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private lateinit var searchBar: SearchBar
+    private lateinit var homeAdapter: HomeAdapter
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -37,12 +32,26 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
-
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
         (activity as AppCompatActivity).supportActionBar?.hide()
+
+        binding.rvTool.layoutManager = GridLayoutManager(requireContext(), 2)
+        homeAdapter = HomeAdapter()
+        binding.rvTool.adapter = homeAdapter
+
+        val homeViewModel by viewModels<HomeViewModel> {
+            HomeViewModelFactory.getInstance(requireActivity())
+        }
+
+        lifecycleScope.launch {
+            homeViewModel.getAllEquipment()
+            homeViewModel.equipmentData.observe(viewLifecycleOwner) { equipmentResponse ->
+                equipmentResponse?.let {
+                    homeAdapter.submitList(it)
+                }
+            }
+        }
 
         val searchView = binding.searchView
         searchBar = binding.searchBar
@@ -61,7 +70,7 @@ class HomeFragment : Fragment() {
                             .show()
 
                     } else {
-
+                        // nothing yet
                     }
                     false
                 }

@@ -4,14 +4,10 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.MenuProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -68,6 +64,8 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView.setupWithNavController(navController)
 
         binding.fab.setOnClickListener {
+            binding.fab.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+            binding.fab.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             intent = Intent(this, CameraActivity::class.java)
             startActivity(intent)
         }
