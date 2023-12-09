@@ -11,4 +11,11 @@ interface ApiService {
 
     @GET("/{id}")
     suspend fun getEquipmentById(@Path("id") id: Int): EquipmentResponseItem
+
+    @GET("/search")
+    suspend fun searchEquipment(
+        @Query("q") query: String,
+        @Query("muscleTypes") muscleTypes: String,
+        @Query("sort") sort: String
+    ): List<EquipmentResponseItem>
 }

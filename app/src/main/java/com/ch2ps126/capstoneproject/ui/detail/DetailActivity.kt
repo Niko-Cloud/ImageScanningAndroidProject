@@ -2,29 +2,22 @@ package com.ch2ps126.capstoneproject.ui.detail
 
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.OnBackPressedDispatcher
 import androidx.activity.viewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.ch2ps126.capstoneproject.R
 import com.ch2ps126.capstoneproject.data.local.db.entity.Bookmark
 import com.ch2ps126.capstoneproject.databinding.ActivityDetailBinding
-import com.ch2ps126.capstoneproject.ui.home.HomeAdapter.Companion.DESCRIPTION
-import com.ch2ps126.capstoneproject.ui.home.HomeAdapter.Companion.EQUIPMENT_ID
-import com.ch2ps126.capstoneproject.ui.home.HomeAdapter.Companion.EQUIPMENT_IMAGE
-import com.ch2ps126.capstoneproject.ui.home.HomeAdapter.Companion.NAME
-import com.ch2ps126.capstoneproject.ui.home.HomeAdapter.Companion.TARGET_MUSCLE
-import com.ch2ps126.capstoneproject.ui.home.HomeAdapter.Companion.TUTORIAL
-import com.ch2ps126.capstoneproject.ui.home.HomeAdapter.Companion.VIDEO_TUTORIAL_LINK
+import com.ch2ps126.capstoneproject.util.Const.DESCRIPTION
+import com.ch2ps126.capstoneproject.util.Const.EQUIPMENT_ID
+import com.ch2ps126.capstoneproject.util.Const.EQUIPMENT_IMAGE
+import com.ch2ps126.capstoneproject.util.Const.NAME
+import com.ch2ps126.capstoneproject.util.Const.TARGET_MUSCLE
+import com.ch2ps126.capstoneproject.util.Const.TUTORIAL
+import com.ch2ps126.capstoneproject.util.Const.VIDEO_TUTORIAL_LINK
 import com.google.android.material.chip.Chip
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.invoke
-import kotlinx.coroutines.launch
 
 class DetailActivity : AppCompatActivity() {
 
@@ -47,7 +40,6 @@ class DetailActivity : AppCompatActivity() {
         val tutorial = intent.getStringExtra(TUTORIAL)
         val videoTutorialLink = intent.getStringExtra(VIDEO_TUTORIAL_LINK)
         val targetMuscles: ArrayList<String?>? = intent.getStringArrayListExtra(TARGET_MUSCLE)
-
 
 
         binding.tvTitle.text = name
@@ -79,6 +71,10 @@ class DetailActivity : AppCompatActivity() {
                 id = equipmentId,
                 name = name,
                 equipmentImage = equipmentImage,
+                description = description,
+                tutorial = tutorial,
+                targetMuscles = targetMuscles,
+                videoTutorialLink = videoTutorialLink
             )
             binding.ivBookmark.setImageResource(
                 if (curr) R.drawable.bookmark_button_filled else R.drawable.bookmark_button_outline

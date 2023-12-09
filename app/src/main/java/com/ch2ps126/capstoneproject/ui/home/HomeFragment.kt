@@ -1,5 +1,7 @@
 package com.ch2ps126.capstoneproject.ui.home
 
+import android.app.Dialog
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,13 +9,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.DialogCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.ch2ps126.capstoneproject.R
 import com.ch2ps126.capstoneproject.databinding.FragmentHomeBinding
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.google.android.material.search.SearchBar
 import kotlinx.coroutines.launch
 
@@ -22,6 +29,14 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private lateinit var searchBar: SearchBar
     private lateinit var homeAdapter: HomeAdapter
+    private val homeViewModel: HomeViewModel by viewModels {
+        HomeViewModelFactory.getInstance(requireActivity())
+    }
+
+    private val selectedChipsLiveData = MutableLiveData<List<String>>()
+    private val selectedChips: MutableList<String> = mutableListOf()
+    private val muscleTypes: Array<String> = arrayOf("chest", "leg", "hand", "stomach", "shoulder")
+
 
     private val binding get() = _binding!!
 
@@ -38,10 +53,6 @@ class HomeFragment : Fragment() {
         homeAdapter = HomeAdapter()
         binding.rvTool.adapter = homeAdapter
 
-        val homeViewModel by viewModels<HomeViewModel> {
-            HomeViewModelFactory.getInstance(requireActivity())
-        }
-
         lifecycleScope.launch {
             homeViewModel.getAllEquipment()
             homeViewModel.equipmentData.observe(viewLifecycleOwner) { equipmentResponse ->
@@ -51,11 +62,26 @@ class HomeFragment : Fragment() {
             }
         }
 
+
+        homeViewModel.searchQuery.observe(viewLifecycleOwner) {
+            homeViewModel.filterEquipment()
+        }
+
+        homeViewModel.muscleTypes.observe(viewLifecycleOwner) {
+            homeViewModel.filterEquipment()
+        }
+
+        homeViewModel.sort.observe(viewLifecycleOwner) {
+            homeViewModel.filterEquipment()
+        }
+
+
         val searchView = binding.searchView
         searchBar = binding.searchBar
 
         with(binding) {
-            searchBar.overflowIcon = ContextCompat.getDrawable(requireContext(), R.drawable.sort)
+            searchBar.overflowIcon =
+                ContextCompat.getDrawable(requireContext(), R.drawable.sort)
             searchView.setupWithSearchBar(this.searchBar)
             searchView
                 .editText
@@ -63,13 +89,7 @@ class HomeFragment : Fragment() {
                     val searchText = searchView.text.toString()
                     searchBar.setText(searchText)
                     searchView.hide()
-                    if (searchView.text?.isEmpty() == true) {
-                        Toast.makeText(requireContext(), "Jangan Kosong", Toast.LENGTH_SHORT)
-                            .show()
-
-                    } else {
-                        // nothing yet
-                    }
+                    homeViewModel.setSearchQuery(searchText)
                     false
                 }
         }
@@ -78,21 +98,117 @@ class HomeFragment : Fragment() {
         searchBar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.menu_az -> {
-                    // Do stuff...
-                    Log.d("Menu", "AZ")
+                    homeViewModel.setSort("asc")
                     true
                 }
+
                 R.id.menu_za -> {
-                    // Do stuff...
-                    Log.d("Menu", "ZA")
+                    homeViewModel.setSort("desc")
                     true
                 }
+
                 else -> false
+            }
+        }
+
+        selectedChipsLiveData.observe(viewLifecycleOwner) { selectedChips ->
+            updateChipGroup(selectedChips)
+        }
+
+        binding.chipGroupFilter.apply {
+            if (selectedChipsLiveData.value.isNullOrEmpty()) {
+                addView(createChip("All", true))
+            } else {
+                selectedChipsLiveData.value?.forEach { chipText ->
+                    addView(createChip(chipText, true))
+                }
             }
         }
 
         return root
     }
+
+    private fun createChip(chipText: String, isChecked: Boolean): Chip {
+        val chip = Chip(requireContext())
+        chip.text = chipText
+        chip.isCheckable = true
+        chip.isChecked = isChecked
+        chip.setOnClickListener {
+            showChipDialog(muscleTypes)
+        }
+        return chip
+    }
+
+    private fun updateChipGroup(chips: List<String>) {
+        binding.chipGroupFilter.removeAllViews()
+        chips.forEach { chipText ->
+            binding.chipGroupFilter.addView(createChip(chipText, true))
+        }
+    }
+
+    private fun showChipDialog(chipItems: Array<String>) {
+        val dialog = Dialog(requireContext())
+
+        val overlayView = View(requireContext())
+        overlayView.setBackgroundColor(Color.parseColor("#80000000"))
+        overlayView.layoutParams = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
+        dialog.setOnDismissListener {
+            (requireActivity().findViewById(android.R.id.content) as ViewGroup).removeView(
+                overlayView
+            )
+        }
+        (requireActivity().findViewById(android.R.id.content) as ViewGroup).addView(overlayView)
+
+        dialog.setContentView(R.layout.dialog_menu)
+        dialog.setCancelable(true)
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        val close = dialog.findViewById<View>(R.id.btn_close)
+        val apply = dialog.findViewById<View>(R.id.btn_apply)
+
+        close?.setOnClickListener {
+            dialog.dismiss()
+        }
+        apply?.setOnClickListener {
+            selectedChipsLiveData.value = selectedChips.toList()
+            if (selectedChips.isEmpty()) {
+                selectedChipsLiveData.value = listOf("All")
+            }
+
+            val muscleTypes = selectedChips.joinToString(",")
+            homeViewModel.setMuscleTypes(muscleTypes)
+            dialog.dismiss()
+        }
+        val chipGroup = dialog.findViewById<ChipGroup>(R.id.chipGroup)
+
+        for (chipItem in chipItems) {
+            val chip = Chip(requireActivity())
+            chip.text = chipItem
+            chip.isClickable = true
+            chip.isCheckable = true
+            chip.isChecked = selectedChips.contains(chipItem)
+
+            chip.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    if (!selectedChips.contains(chipItem)) {
+                        selectedChips.add(chipItem)
+                    }
+                } else {
+                    if (selectedChips.contains(chipItem)) {
+                        selectedChips.remove(chipItem)
+                    }
+                }
+            }
+
+            chipGroup.addView(chip)
+        }
+
+        dialog.show()
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

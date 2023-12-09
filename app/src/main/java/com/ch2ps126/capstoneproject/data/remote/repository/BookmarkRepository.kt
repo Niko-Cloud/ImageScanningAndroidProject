@@ -21,6 +21,10 @@ class BookmarkRepository private constructor(private val bookmarkDao: BookmarkDa
         bookmarkDao.deleteById(id)
     }
 
+    suspend fun searchBookmarks(searchQuery: String): List<Bookmark> {
+        return bookmarkDao.searchBookmarks(searchQuery)
+    }
+
     companion object {
         @Volatile
         private var instance: BookmarkRepository? = null

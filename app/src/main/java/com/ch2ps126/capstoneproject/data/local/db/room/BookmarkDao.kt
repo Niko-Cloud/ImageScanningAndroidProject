@@ -24,4 +24,7 @@ interface BookmarkDao {
 
     @Query("SELECT * FROM Bookmark")
     suspend fun getBookmarkData(): List<Bookmark>
+
+    @Query("SELECT * FROM Bookmark WHERE name LIKE '%' || :searchQuery || '%'")
+    suspend fun searchBookmarks(searchQuery: String): List<Bookmark>
 }

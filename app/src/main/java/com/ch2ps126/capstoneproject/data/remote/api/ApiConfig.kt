@@ -17,7 +17,7 @@ class ApiConfig {
                 .readTimeout(30, TimeUnit.SECONDS)
                 .build()
             val retrofit = Retrofit.Builder()
-                .baseUrl("http://192.168.10.153:3000/")
+                .baseUrl("http://192.168.169.153:3000/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build()

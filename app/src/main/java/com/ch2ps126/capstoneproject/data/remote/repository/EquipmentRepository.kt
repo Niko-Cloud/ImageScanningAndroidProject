@@ -13,6 +13,10 @@ class EquipmentRepository private constructor(private val apiService: ApiService
         return apiService.getEquipmentById(id)
     }
 
+    suspend fun searchEquipment(query: String, muscleTypes: String, sort: String): List<EquipmentResponseItem> {
+        return apiService.searchEquipment(query, muscleTypes, sort)
+    }
+
     companion object {
         @Volatile
         private var instance: EquipmentRepository? = null

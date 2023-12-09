@@ -1,29 +1,43 @@
 package com.ch2ps126.capstoneproject.ui.camera
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Point
+import android.graphics.Rect
 import android.os.Build
+import android.os.Bundle
 import android.util.Log
+import android.util.Size
 import android.view.OrientationEventListener
 import android.view.Surface
+import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.OptIn
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.ExperimentalGetImage
+import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
+import androidx.lifecycle.LifecycleOwner
 import com.ch2ps126.capstoneproject.databinding.ActivityCameraBinding
 import com.ch2ps126.capstoneproject.ui.result.ResultActivity
+import com.google.common.util.concurrent.ListenableFuture
+import com.google.mlkit.common.model.LocalModel
+import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.objects.ObjectDetection
+import com.google.mlkit.vision.objects.ObjectDetector
+import com.google.mlkit.vision.objects.custom.CustomObjectDetectorOptions
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -37,6 +51,9 @@ class CameraActivity : AppCompatActivity() {
     private val timestamp: String = SimpleDateFormat(
         FILENAME_FORMAT, Locale.US
     ).format(Date())
+
+    private lateinit var objectDetector: ObjectDetector
+    private lateinit var cameraProviderFuture : ListenableFuture<ProcessCameraProvider>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,7 +84,7 @@ class CameraActivity : AppCompatActivity() {
             val preview = Preview.Builder()
                 .build()
                 .also {
-                    it.setSurfaceProvider(binding.viewFinder.surfaceProvider)
+                    it.setSurfaceProvider(binding.previewView.surfaceProvider)
                 }
 
             imageCapture = ImageCapture.Builder().build()

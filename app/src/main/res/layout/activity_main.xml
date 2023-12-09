@@ -15,7 +15,6 @@
         app:elevation="2dp"
         app:navGraph="@navigation/menu_navigation" />
 
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"

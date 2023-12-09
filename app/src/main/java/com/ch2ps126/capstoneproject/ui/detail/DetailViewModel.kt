@@ -48,7 +48,7 @@ class DetailViewModel(
     fun deleteBookmark(id: Int) {
         viewModelScope.launch {
             bookmarkRepository.deleteBookmark(id)
+            bookmarkRepository.getBookmarkExists(id)
         }
-        bookmarkRepository.getBookmarkExists(id)
     }
 }

@@ -24,7 +24,22 @@ class BookmarkViewModel(private val bookmarkRepository: BookmarkRepository): Vie
                 _bookmarkData.value = data
                 _isLoading.value = false
             } catch (e: Exception) {
-                Log.d("StoryListViewModel", "Error: ${e.message}")
+                Log.d("BookmarkViewModel", "Error: ${e.message}")
+                _isLoading.value = false
+                throw e
+            }
+        }
+    }
+
+    fun searchBookmark(searchQuery: String) {
+        _isLoading.value = true
+        viewModelScope.launch {
+            try {
+                val data = bookmarkRepository.searchBookmarks(searchQuery)
+                _bookmarkData.value = data
+                _isLoading.value = false
+            } catch (e: Exception) {
+                Log.d("BookmarkViewModel", "Error: ${e.message}")
                 _isLoading.value = false
                 throw e
             }
