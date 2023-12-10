@@ -51,7 +51,7 @@ dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("androidx.preference:preference:1.2.1")
+
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -95,14 +95,15 @@ dependencies {
     ksp("androidx.room:room-compiler:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
 
+    //datastpore pref
+    implementation("androidx.preference:preference-ktx:1.2.1")
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+
     //Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
-
 
     //Tensorflo
     implementation ("org.tensorflow:tensorflow-lite-support:0.4.4")
     implementation ("org.tensorflow:tensorflow-lite-metadata:0.4.4")
     implementation("org.tensorflow:tensorflow-lite-gpu:2.9.0")
-
-
 }

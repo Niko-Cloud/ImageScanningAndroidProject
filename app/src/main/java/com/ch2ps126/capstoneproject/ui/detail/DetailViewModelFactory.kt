@@ -7,7 +7,10 @@ import com.ch2ps126.capstoneproject.data.di.Injection
 import com.ch2ps126.capstoneproject.data.remote.repository.BookmarkRepository
 import com.ch2ps126.capstoneproject.data.remote.repository.EquipmentRepository
 
-class DetailViewModelFactory(private val equipmentRepository: EquipmentRepository, private val bookmarkRepository: BookmarkRepository):
+class DetailViewModelFactory(
+    private val equipmentRepository: EquipmentRepository,
+    private val bookmarkRepository: BookmarkRepository
+) :
     ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")
@@ -16,6 +19,7 @@ class DetailViewModelFactory(private val equipmentRepository: EquipmentRepositor
             modelClass.isAssignableFrom(DetailViewModel::class.java) -> {
                 DetailViewModel(equipmentRepository, bookmarkRepository) as T
             }
+
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }
     }
