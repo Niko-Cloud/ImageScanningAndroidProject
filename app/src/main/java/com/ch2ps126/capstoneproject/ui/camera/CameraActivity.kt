@@ -2,6 +2,7 @@ package com.ch2ps126.capstoneproject.ui.camera
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +11,8 @@ import android.view.Surface
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
@@ -32,6 +35,7 @@ class CameraActivity : AppCompatActivity() {
     private val timestamp: String = SimpleDateFormat(
         FILENAME_FORMAT, Locale.US
     ).format(Date())
+    private var currentImageUri: Uri? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,8 +50,44 @@ class CameraActivity : AppCompatActivity() {
             startCamera()
         }
         binding.captureImage.setOnClickListener { takePhoto() }
+        binding.openGallery.setOnClickListener { startGallery() }
 
     }
+
+    private fun resultIntent(imageUri: Uri) {
+        val intent = Intent(this@CameraActivity, ResultActivity::class.java)
+        intent.putExtra(EXTRA_CAMERAX_IMAGE, imageUri.toString())
+        setResult(CAMERAX_RESULT, intent)
+        startActivity(intent)
+    }
+
+
+    private fun startGallery() {
+        launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+    }
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            showToast("Permission request granted")
+        } else {
+            showToast("Permission request denied")
+        }
+    }
+
+
+    private val launcherGallery = registerForActivityResult(
+        ActivityResultContracts.PickVisualMedia()
+    ) { uri: Uri? ->
+        if (uri != null) {
+            currentImageUri = uri
+            resultIntent(currentImageUri!!)
+        } else {
+            Log.d("Photo Picker", "No media selected")
+        }
+    }
+
 
     public override fun onResume() {
         super.onResume()
@@ -101,10 +141,7 @@ class CameraActivity : AppCompatActivity() {
             ContextCompat.getMainExecutor(this),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
-                    val intent = Intent(this@CameraActivity, ResultActivity::class.java)
-                    intent.putExtra(EXTRA_CAMERAX_IMAGE, output.savedUri.toString())
-                    setResult(CAMERAX_RESULT)
-                    startActivity(intent)
+                    output.savedUri?.let { resultIntent(it) }
                 }
 
                 override fun onError(exc: ImageCaptureException) {
@@ -147,6 +184,10 @@ class CameraActivity : AppCompatActivity() {
                 imageCapture?.targetRotation = rotation
             }
         }
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
     override fun onStart() {

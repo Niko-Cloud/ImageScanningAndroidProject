@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 val Context.dataStore: DataStore<androidx.datastore.preferences.core.Preferences> by preferencesDataStore(
-    name = "settings"
+    name = "options"
 )
 
 class SettingPreferences private constructor(private val dataStore: DataStore<androidx.datastore.preferences.core.Preferences>) {

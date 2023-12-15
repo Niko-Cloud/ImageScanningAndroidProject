@@ -1,128 +1,87 @@
 package com.ch2ps126.capstoneproject.ui.result
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
-import android.widget.Button
 import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
+import com.bumptech.glide.Glide
 import com.ch2ps126.capstoneproject.databinding.ActivityResultBinding
-import com.ch2ps126.capstoneproject.ml.BirdModel
-import com.ch2ps126.capstoneproject.ml.EquipmentModel
-import org.tensorflow.lite.DataType
-import org.tensorflow.lite.support.image.TensorImage
-import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
-import java.io.IOException
-import java.nio.ByteBuffer
+import com.ch2ps126.capstoneproject.ui.camera.CameraActivity.Companion.EXTRA_CAMERAX_IMAGE
+import com.ch2ps126.capstoneproject.ui.detail.DetailActivity
+import com.ch2ps126.capstoneproject.ui.home.HomeViewModel
+import com.ch2ps126.capstoneproject.ui.home.HomeViewModelFactory
+import com.ch2ps126.capstoneproject.util.Const
+import com.ch2ps126.capstoneproject.util.ModelProcessing.modelProcess
 
 class ResultActivity : AppCompatActivity() {
 
-
     private lateinit var binding: ActivityResultBinding
     private lateinit var imageView: ImageView
-    private lateinit var button: Button
-    private lateinit var tvOutput: TextView
+    private lateinit var backButton: CardView
 
+    private val homeViewModel: HomeViewModel by viewModels {
+        HomeViewModelFactory.getInstance(this)
+    }
 
-    private var currentImageUri: Uri? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityResultBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
-        imageView = binding.imageView
-        button = binding.btnCaptureImage
-        tvOutput = binding.tvOutput
+        imageView = binding.ivCameraResult
+        backButton = binding.btnTryAgain
 
-        val buttonLoad = binding.btnLoadImage
-
-
-        buttonLoad.setOnClickListener {
-
-            startGallery()
-
+        backButton.setOnClickListener {
+            finish()
         }
-    }
 
-    private fun startGallery() {
-        launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-    }
-
-    private val requestPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted: Boolean ->
-        if (isGranted) {
-            showToast("Permission request granted")
-        } else {
-            showToast("Permission request denied")
+        homeViewModel.searchQuery.observe(this) {
+            homeViewModel.filterEquipment()
         }
-    }
+
+        val imageUri = Uri.parse(intent.getStringExtra(EXTRA_CAMERAX_IMAGE))
+        imageView.setImageURI(imageUri)
+
+        val score = modelProcess(imageUri, this, contentResolver)
 
 
-    private val launcherGallery = registerForActivityResult(
-        ActivityResultContracts.PickVisualMedia()
-    ) { uri: Uri? ->
-        if (uri != null) {
-            currentImageUri = uri
-            showImage()
-        } else {
-            Log.d("Photo Picker", "No media selected")
-        }
-    }
+        when {
+            score < 0.5 -> {
+                homeViewModel.setSearchQuery("benchpress")
+            }
 
-    private fun showImage() {
-        currentImageUri?.let { uri ->
-            try {
-                val model = EquipmentModel.newInstance(this)
+            score > 0.5 -> {
+                homeViewModel.setSearchQuery("dumbell")
+            }
 
-                val inputStream = contentResolver.openInputStream(uri)
-                val bitmap = BitmapFactory.decodeStream(inputStream)
-
-                // Resize the bitmap to match the model's expected input size (640x640)
-                val resizedBitmap = Bitmap.createScaledBitmap(bitmap, 640, 640, true)
-
-                // Convert the resized bitmap to a ByteBuffer
-                val byteBuffer = resizedBitmap.toByteBuffer()
-
-                // Create TensorBuffer and load the ByteBuffer
-                val inputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1, 640, 640, 3), DataType.FLOAT32)
-                inputFeature0.loadBuffer(byteBuffer)
-
-                // Run model inference
-                val outputs = model.process(inputFeature0)
-                val outputFeature0 = outputs.outputFeature0AsTensorBuffer
-
-                // Process the output as needed
-                val max = outputFeature0.floatArray.toString()
-                Log.d("Result", max.toString())
-                Log.d("Result", outputFeature0.toString())
-
-                // Display image in the imageView
-                imageView.setImageBitmap(resizedBitmap)
-
-                // Close the model to release resources
-                model.close()
-            } catch (e: IOException) {
-                e.printStackTrace()
+            else -> {
+                // do nothing
             }
         }
-    }
-    private fun Bitmap.toByteBuffer(): ByteBuffer {
-        val byteBuffer = ByteBuffer.allocateDirect(4 * width * height * 3)
-        byteBuffer.rewind()
-        copyPixelsToBuffer(byteBuffer)
-        return byteBuffer
-    }
-
-
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        homeViewModel.equipmentData.observe(this) { equipment ->
+            Glide.with(binding.root)
+                .load(equipment[0].equipmentImage)
+                .into(binding.ivResult)
+            binding.tvResultName.text = equipment[0].name
+            val targetMuscle = equipment[0].targetMuscles
+            val array = ArrayList(targetMuscle ?: listOf())
+            val intent = Intent(this, DetailActivity::class.java)
+            intent.apply {
+                putExtra(Const.EQUIPMENT_ID, equipment[0].equipmentId)
+                putExtra(Const.NAME, equipment[0].name)
+                putExtra(Const.EQUIPMENT_IMAGE, equipment[0].equipmentImage)
+                putExtra(Const.DESCRIPTION, equipment[0].description)
+                putExtra(Const.TARGET_MUSCLE, array)
+                putExtra(Const.TUTORIAL, equipment[0].tutorial)
+                putExtra(Const.VIDEO_TUTORIAL_LINK, equipment[0].videoTutorialLink)
+            }
+            binding.cardView2.setOnClickListener {
+                startActivity(intent)
+            }
+        }
     }
 }

@@ -1,8 +1,10 @@
 package com.ch2ps126.capstoneproject.ui.home
 
 import android.content.Intent
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -51,6 +53,7 @@ class HomeAdapter : ListAdapter<EquipmentResponseItem, HomeAdapter.MyViewHolder>
                     putExtra(TUTORIAL, equipment.tutorial)
                     putExtra(VIDEO_TUTORIAL_LINK, equipment.videoTutorialLink)
                 }
+                itemView.context.startActivity(intent)
 
 //
 //                val optionsCompat: ActivityOptionsCompat =
@@ -61,10 +64,12 @@ class HomeAdapter : ListAdapter<EquipmentResponseItem, HomeAdapter.MyViewHolder>
 //                        Pair(binding.tvStoryDescription, "description"),
 //                    )
 //                itemView.context.startActivity(intent, optionsCompat.toBundle())
-                itemView.context.startActivity(intent)
+
             }
         }
     }
+
+
 
     companion object {
         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<EquipmentResponseItem>() {

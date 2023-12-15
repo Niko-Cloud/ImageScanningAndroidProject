@@ -7,16 +7,25 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.ch2ps126.capstoneproject.R
 import com.ch2ps126.capstoneproject.databinding.ActivityMainBinding
+import com.ch2ps126.capstoneproject.pref.SettingPreferences
+import com.ch2ps126.capstoneproject.pref.dataStore
 import com.ch2ps126.capstoneproject.ui.camera.CameraActivity
+import com.ch2ps126.capstoneproject.ui.settings.SettingsViewModel
+import com.ch2ps126.capstoneproject.ui.settings.SettingsViewModelFactory
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationBarView
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -48,6 +57,7 @@ class MainActivity : AppCompatActivity() {
             requestPermissionLauncher.launch(REQUIRED_PERMISSION)
         }
 
+
         val bottomNavigationView: BottomNavigationView = binding.bottomNavigationView
         bottomNavigationView.background = null
         bottomNavigationView.menu.getItem(2).isEnabled = false // Disable the middle icon
@@ -69,9 +79,20 @@ class MainActivity : AppCompatActivity() {
             intent = Intent(this, CameraActivity::class.java)
             startActivity(intent)
         }
+
+        val pref = SettingPreferences.getInstance(application.dataStore)
+        val settingsViewModel =
+            ViewModelProvider(this, SettingsViewModelFactory(pref))[SettingsViewModel::class.java]
+        settingsViewModel.getThemeSettings().observe(this) { isDarkModeActive: Boolean ->
+            if (isDarkModeActive) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }
     }
 
-    companion object{
+    companion object {
         private const val REQUIRED_PERMISSION = Manifest.permission.CAMERA
     }
 }
