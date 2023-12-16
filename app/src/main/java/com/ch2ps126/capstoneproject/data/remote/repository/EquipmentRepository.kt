@@ -1,7 +1,6 @@
 package com.ch2ps126.capstoneproject.data.remote.repository
 
 import com.ch2ps126.capstoneproject.data.remote.api.ApiService
-import com.ch2ps126.capstoneproject.data.remote.response.EquipmentResponse
 import com.ch2ps126.capstoneproject.data.remote.response.EquipmentResponseItem
 
 class EquipmentRepository private constructor(private val apiService: ApiService){

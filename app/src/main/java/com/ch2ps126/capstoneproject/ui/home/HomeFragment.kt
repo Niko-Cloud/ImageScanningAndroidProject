@@ -36,7 +36,7 @@
 
         private val selectedChipsLiveData = MutableLiveData<List<String>>()
         private val selectedChips: MutableList<String> = mutableListOf()
-        private val muscleTypes: Array<String> = arrayOf("chest", "leg", "hand", "stomach", "shoulder")
+        private var muscleTypes: Array<String> = arrayOf()
         private val binding get() = _binding!!
 
         override fun onCreateView(
@@ -53,28 +53,8 @@
             homeAdapter = HomeAdapter()
             binding.rvTool.adapter = homeAdapter
 
-            lifecycleScope.launch {
-                homeViewModel.getAllEquipment()
-                homeViewModel.equipmentData.observe(viewLifecycleOwner) { equipmentResponse ->
-                    equipmentResponse?.let {
-                        homeAdapter.submitList(it)
-                    }
-                }
-            }
-
-
-            homeViewModel.searchQuery.observe(viewLifecycleOwner) {
-                homeViewModel.filterEquipment()
-            }
-
-            homeViewModel.muscleTypes.observe(viewLifecycleOwner) {
-                homeViewModel.filterEquipment()
-            }
-
-            homeViewModel.sort.observe(viewLifecycleOwner) {
-                homeViewModel.filterEquipment()
-            }
-
+            homeViewModel()
+            getAllMuscles()
 
             val searchView = binding.searchView
             searchBar = binding.searchBar
@@ -126,6 +106,40 @@
             }
 
             return root
+        }
+
+        private fun homeViewModel(){
+            lifecycleScope.launch {
+                homeViewModel.getAllEquipment()
+                homeViewModel.equipmentData.observe(viewLifecycleOwner) { equipmentResponse ->
+                    equipmentResponse?.let {
+                        homeAdapter.submitList(it)
+                    }
+                }
+            }
+
+            homeViewModel.searchQuery.observe(viewLifecycleOwner) {
+                homeViewModel.filterEquipment()
+            }
+
+            homeViewModel.muscleTypes.observe(viewLifecycleOwner) {
+                homeViewModel.filterEquipment()
+            }
+
+            homeViewModel.sort.observe(viewLifecycleOwner) {
+                homeViewModel.filterEquipment()
+            }
+        }
+
+        private fun getAllMuscles(){
+            homeViewModel.getAllMuscles()
+            homeViewModel.musclesData.observe(viewLifecycleOwner) { muscleResponse ->
+                muscleResponse?.let {
+                    muscleTypes = it.map { muscle ->
+                        muscle?.targetMuscleName ?: ""
+                    }.toTypedArray()
+                }
+            }
         }
 
         private fun createChip(chipText: String, isChecked: Boolean): Chip {

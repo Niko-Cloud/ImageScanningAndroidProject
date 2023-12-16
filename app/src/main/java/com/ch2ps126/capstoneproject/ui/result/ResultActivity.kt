@@ -32,6 +32,8 @@ class ResultActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        supportActionBar?.hide()
+
         imageView = binding.ivCameraResult
         backButton = binding.btnTryAgain
 
@@ -67,15 +69,17 @@ class ResultActivity : AppCompatActivity() {
                 .load(equipment[0].equipmentImage)
                 .into(binding.ivResult)
             binding.tvResultName.text = equipment[0].name
-            val targetMuscle = equipment[0].targetMuscles
-            val array = ArrayList(targetMuscle ?: listOf())
+            val targetMuscles = equipment[0].muscles
+            val muscleNames = targetMuscles?.joinToString(", ") { it?.targetMuscleName ?: "" }
             val intent = Intent(this, DetailActivity::class.java)
             intent.apply {
                 putExtra(Const.EQUIPMENT_ID, equipment[0].equipmentId)
                 putExtra(Const.NAME, equipment[0].name)
                 putExtra(Const.EQUIPMENT_IMAGE, equipment[0].equipmentImage)
                 putExtra(Const.DESCRIPTION, equipment[0].description)
-                putExtra(Const.TARGET_MUSCLE, array)
+                putStringArrayListExtra(
+                    Const.TARGET_MUSCLE,
+                    muscleNames?.split(", ")?.let { it1 -> ArrayList(it1) })
                 putExtra(Const.TUTORIAL, equipment[0].tutorial)
                 putExtra(Const.VIDEO_TUTORIAL_LINK, equipment[0].videoTutorialLink)
             }

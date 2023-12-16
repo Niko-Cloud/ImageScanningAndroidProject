@@ -5,15 +5,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.ch2ps126.capstoneproject.data.di.Injection
 import com.ch2ps126.capstoneproject.data.remote.repository.EquipmentRepository
+import com.ch2ps126.capstoneproject.data.remote.repository.MuscleRepository
+import com.ch2ps126.capstoneproject.ui.detail.DetailViewModelFactory
 
-class HomeViewModelFactory(private val repository: EquipmentRepository) :
+class HomeViewModelFactory(private val repository: EquipmentRepository, private val muscleRepository: MuscleRepository) :
     ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
             modelClass.isAssignableFrom(HomeViewModel::class.java) -> {
-                HomeViewModel(repository) as T
+                HomeViewModel(repository,muscleRepository) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }
@@ -27,7 +29,10 @@ class HomeViewModelFactory(private val repository: EquipmentRepository) :
         fun getInstance(context: Context): HomeViewModelFactory {
             if (INSTANCE == null) {
                 synchronized(HomeViewModelFactory::class.java) {
-                    INSTANCE = HomeViewModelFactory(Injection.provideEquipmentRepository(context))
+                    INSTANCE = HomeViewModelFactory(
+                        Injection.provideEquipmentRepository(context),
+                        Injection.provideMuscleRepository(context)
+                    )
                 }
             }
             return INSTANCE as HomeViewModelFactory

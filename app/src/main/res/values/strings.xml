@@ -4,7 +4,7 @@
     <string name="bookmark">Bookmark</string>
     <string name="profile">Profile</string>
     <string name="settings">Settings</string>
-    <!-- TODO: Remove or change this placeholder text -->
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
@@ -32,4 +32,10 @@
     <string name="result_found">Result Found</string>
     <string name="open_tutorial">Open the tutorial Video</string>
     <string name="try_again">Try Again</string>
+    <string name="anov">• M200BSY0319 - Alfrethanov Christian Wijaya</string>
+    <string name="bela">• M200BSY0319 - Bela Sisilia</string>
+    <string name="rifqi">• M283BSX1547 - Ahmad Rifqi Al Aziz</string>
+    <string name="ivan">• M283BSY0536 - Ahmad Ivan Andrian</string>
+    <string name="sindi">• C200BSY3441 - Deva Sindi Maulita</string>
+    <string name="app_maker_me">• A002BSY2428 - Indra Niko Saputra</string>
 </resources>

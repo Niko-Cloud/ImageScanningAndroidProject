@@ -1,6 +1,7 @@
 package com.ch2ps126.capstoneproject.ui.home
 
 import android.content.Intent
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -35,8 +36,8 @@ class HomeAdapter : ListAdapter<EquipmentResponseItem, HomeAdapter.MyViewHolder>
     class MyViewHolder( private val binding: ItemFragmentToolsBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(equipment: EquipmentResponseItem) {
             binding.tvItem.text = equipment.name
-            val targetMuscle = equipment.targetMuscles
-            val array = ArrayList(targetMuscle ?: listOf())
+            val targetMuscles = equipment.muscles
+            val muscleNames = targetMuscles?.joinToString(", ") { it?.targetMuscleName ?: "" }
             Glide.with(binding.root)
                 .load(equipment.equipmentImage)
                 .into(binding.ivItem)
@@ -49,7 +50,8 @@ class HomeAdapter : ListAdapter<EquipmentResponseItem, HomeAdapter.MyViewHolder>
                     putExtra(NAME, equipment.name)
                     putExtra(EQUIPMENT_IMAGE, equipment.equipmentImage)
                     putExtra(DESCRIPTION, equipment.description)
-                    putExtra(TARGET_MUSCLE, array)
+                    putStringArrayListExtra(TARGET_MUSCLE,
+                        muscleNames?.split(", ")?.let { it1 -> ArrayList(it1) })
                     putExtra(TUTORIAL, equipment.tutorial)
                     putExtra(VIDEO_TUTORIAL_LINK, equipment.videoTutorialLink)
                 }

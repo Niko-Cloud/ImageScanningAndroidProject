@@ -39,8 +39,7 @@ class DetailActivity : AppCompatActivity() {
         val description = intent.getStringExtra(DESCRIPTION)
         val tutorial = intent.getStringExtra(TUTORIAL)
         val videoTutorialLink = intent.getStringExtra(VIDEO_TUTORIAL_LINK)
-        val targetMuscles: ArrayList<String?>? = intent.getStringArrayListExtra(TARGET_MUSCLE)
-
+        val targetMuscles: ArrayList<String>? = intent.getStringArrayListExtra(TARGET_MUSCLE)
 
         binding.tvTitle.text = name
         binding.tvDescriptionDetail.text = description
