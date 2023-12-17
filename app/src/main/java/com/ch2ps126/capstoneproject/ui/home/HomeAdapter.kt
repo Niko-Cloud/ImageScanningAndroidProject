@@ -57,16 +57,6 @@ class HomeAdapter : ListAdapter<EquipmentResponseItem, HomeAdapter.MyViewHolder>
                 }
                 itemView.context.startActivity(intent)
 
-//
-//                val optionsCompat: ActivityOptionsCompat =
-//                    ActivityOptionsCompat.makeSceneTransitionAnimation(
-//                        itemView.context as Activity,
-//                        Pair(binding.tvItem, "profile"),
-//                        Pair(binding.tvItemName, "name"),
-//                        Pair(binding.tvStoryDescription, "description"),
-//                    )
-//                itemView.context.startActivity(intent, optionsCompat.toBundle())
-
             }
         }
     }
