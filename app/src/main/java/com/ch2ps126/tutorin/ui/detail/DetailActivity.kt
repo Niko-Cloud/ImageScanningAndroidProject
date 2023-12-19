@@ -38,7 +38,7 @@ class DetailActivity : AppCompatActivity() {
         val name = intent.getStringExtra(NAME)
         val equipmentImage = intent.getStringExtra(EQUIPMENT_IMAGE)
         val description = intent.getStringExtra(DESCRIPTION)
-        val tutorial:ArrayList<String>? = intent.getStringArrayListExtra(TUTORIAL)
+        val tutorial: ArrayList<String>? = intent.getStringArrayListExtra(TUTORIAL)
         val videoTutorialLink = intent.getStringExtra(VIDEO_TUTORIAL_LINK)
         val targetMuscles: ArrayList<String>? = intent.getStringArrayListExtra(TARGET_MUSCLE)
 

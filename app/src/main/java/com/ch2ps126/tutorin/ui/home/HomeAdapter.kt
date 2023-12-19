@@ -18,7 +18,7 @@ import com.ch2ps126.tutorin.util.Const.TARGET_MUSCLE
 import com.ch2ps126.tutorin.util.Const.TUTORIAL
 import com.ch2ps126.tutorin.util.Const.VIDEO_TUTORIAL_LINK
 
-class HomeAdapter : ListAdapter<EquipmentResponseItem, HomeAdapter.MyViewHolder>(DIFF_CALLBACK){
+class HomeAdapter : ListAdapter<EquipmentResponseItem, HomeAdapter.MyViewHolder>(DIFF_CALLBACK) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val binding =
             ItemFragmentToolsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -30,7 +30,8 @@ class HomeAdapter : ListAdapter<EquipmentResponseItem, HomeAdapter.MyViewHolder>
         holder.bind(item)
     }
 
-    class MyViewHolder( private val binding: ItemFragmentToolsBinding) : RecyclerView.ViewHolder(binding.root) {
+    class MyViewHolder(private val binding: ItemFragmentToolsBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(equipment: EquipmentResponseItem) {
             binding.tvItem.text = equipment.name
             val targetMuscles = equipment.muscles
@@ -60,11 +61,12 @@ class HomeAdapter : ListAdapter<EquipmentResponseItem, HomeAdapter.MyViewHolder>
         }
     }
 
-
-
     companion object {
         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<EquipmentResponseItem>() {
-            override fun areItemsTheSame(oldItem: EquipmentResponseItem, newItem: EquipmentResponseItem): Boolean {
+            override fun areItemsTheSame(
+                oldItem: EquipmentResponseItem,
+                newItem: EquipmentResponseItem
+            ): Boolean {
                 return oldItem == newItem
             }
 

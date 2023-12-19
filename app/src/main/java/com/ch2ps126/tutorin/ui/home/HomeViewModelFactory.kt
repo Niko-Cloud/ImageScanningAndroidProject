@@ -7,15 +7,19 @@ import com.ch2ps126.tutorin.data.di.Injection
 import com.ch2ps126.tutorin.data.remote.repository.EquipmentRepository
 import com.ch2ps126.tutorin.data.remote.repository.MuscleRepository
 
-class HomeViewModelFactory(private val repository: EquipmentRepository, private val muscleRepository: MuscleRepository) :
+class HomeViewModelFactory(
+    private val repository: EquipmentRepository,
+    private val muscleRepository: MuscleRepository
+) :
     ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
             modelClass.isAssignableFrom(HomeViewModel::class.java) -> {
-                HomeViewModel(repository,muscleRepository) as T
+                HomeViewModel(repository, muscleRepository) as T
             }
+
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }
     }

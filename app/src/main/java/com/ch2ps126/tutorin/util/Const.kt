@@ -1,6 +1,6 @@
 package com.ch2ps126.tutorin.util
 
-object Const{
+object Const {
     const val EQUIPMENT_ID = "equipment_id"
     const val NAME = "name"
     const val DESCRIPTION = "description"

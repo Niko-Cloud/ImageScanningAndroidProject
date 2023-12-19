@@ -4,7 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.ch2ps126.tutorin.pref.SettingPreferences
 
-class SettingsViewModelFactory (private val pref: SettingPreferences) : ViewModelProvider.NewInstanceFactory() {
+class SettingsViewModelFactory(private val pref: SettingPreferences) :
+    ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

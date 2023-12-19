@@ -116,16 +116,16 @@
             android:id="@+id/tv_how_to_use"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:isScrollContainer="false"
             android:lineSpacingExtra="2dp"
             android:padding="4dp"
             android:textColor="?attr/colorPrimary"
             android:textSize="14sp"
-            android:isScrollContainer="false"
             android:textStyle="normal"
             app:layout_constraintEnd_toEndOf="@+id/tv_description_detail"
             app:layout_constraintStart_toStartOf="@+id/tv_how_title"
             app:layout_constraintTop_toBottomOf="@+id/tv_how_title"
-            tools:listitem="@layout/how_to_use_item"/>
+            tools:listitem="@layout/how_to_use_item" />
 
         <TextView
             android:id="@+id/tv_link_video"

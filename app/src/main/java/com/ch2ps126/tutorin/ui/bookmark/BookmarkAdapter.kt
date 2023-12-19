@@ -49,19 +49,12 @@ class BookmarkAdapter : ListAdapter<Bookmark, BookmarkAdapter.MyViewHolder>(DIFF
                     putExtra(EQUIPMENT_IMAGE, equipment.equipmentImage)
                     putExtra(DESCRIPTION, equipment.description)
                     putExtra(TARGET_MUSCLE, array)
-                    putStringArrayListExtra(TUTORIAL, equipment.tutorial?.let { it1 -> ArrayList(it1) })
+                    putStringArrayListExtra(
+                        TUTORIAL,
+                        equipment.tutorial?.let { it1 -> ArrayList(it1) })
                     putExtra(VIDEO_TUTORIAL_LINK, equipment.videoTutorialLink)
                 }
 
-//
-//                val optionsCompat: ActivityOptionsCompat =
-//                    ActivityOptionsCompat.makeSceneTransitionAnimation(
-//                        itemView.context as Activity,
-//                        Pair(binding.tvItem, "profile"),
-//                        Pair(binding.tvItemName, "name"),
-//                        Pair(binding.tvStoryDescription, "description"),
-//                    )
-//                itemView.context.startActivity(intent, optionsCompat.toBundle())
                 itemView.context.startActivity(intent)
             }
         }

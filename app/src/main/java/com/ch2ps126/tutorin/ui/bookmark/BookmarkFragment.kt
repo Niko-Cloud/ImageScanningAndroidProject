@@ -18,7 +18,6 @@ import kotlinx.coroutines.launch
 class BookmarkFragment : Fragment() {
 
     private var _binding: FragmentBookmarkBinding? = null
-    private lateinit var searchBar: SearchBar
     private lateinit var bookmarkAdapter: BookmarkAdapter
 
     private val viewModel by viewModels<BookmarkViewModel> {
@@ -44,10 +43,19 @@ class BookmarkFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.getAllBookmark()
             viewModel.bookmarkData.observe(viewLifecycleOwner) { equipmentResponse ->
+                if (equipmentResponse.isEmpty()) {
+                    binding.tvNotFound.visibility = View.VISIBLE
+                } else {
+                    binding.tvNotFound.visibility = View.GONE
+                }
                 equipmentResponse?.let {
                     bookmarkAdapter.submitList(it)
                 }
             }
+        }
+
+        viewModel.isLoading.observe(viewLifecycleOwner) {
+            binding.progressBar.visibility = if (it) View.VISIBLE else View.GONE
         }
 
         with(binding) {

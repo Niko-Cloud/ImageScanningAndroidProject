@@ -9,7 +9,7 @@ import com.ch2ps126.tutorin.data.local.db.entity.Bookmark
 import com.ch2ps126.tutorin.data.remote.repository.BookmarkRepository
 import kotlinx.coroutines.launch
 
-class BookmarkViewModel(private val bookmarkRepository: BookmarkRepository): ViewModel() {
+class BookmarkViewModel(private val bookmarkRepository: BookmarkRepository) : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
@@ -18,7 +18,7 @@ class BookmarkViewModel(private val bookmarkRepository: BookmarkRepository): Vie
 
     fun getAllBookmark() {
         _isLoading.value = true
-        viewModelScope.launch{
+        viewModelScope.launch {
             try {
                 val data = bookmarkRepository.getBookmarkData()
                 _bookmarkData.value = data

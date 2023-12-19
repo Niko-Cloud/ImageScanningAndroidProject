@@ -39,11 +39,12 @@ class HomeViewModel(
         try {
             val data = repository.getAllEquipment()
             _equipmentData.value = data
-            _isLoading.value = false
         } catch (e: Exception) {
             Log.d("HomeViewModel", "Error: ${e.message}")
             _isLoading.value = false
             throw e
+        } finally {
+            _isLoading.value = false
         }
     }
 

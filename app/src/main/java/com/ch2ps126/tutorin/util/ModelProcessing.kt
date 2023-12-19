@@ -5,7 +5,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import android.util.Log
 import com.ch2ps126.tutorin.ml.ModelV12
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
@@ -25,7 +24,15 @@ object ModelProcessing {
         val byteBuffer: ByteBuffer = ByteBuffer.allocateDirect(4 * imageSize * imageSize * 3)
         byteBuffer.order(ByteOrder.nativeOrder())
         val intValues = IntArray(imageSize * imageSize)
-        scaledBitmap.getPixels(intValues, 0, scaledBitmap.width, 0, 0, scaledBitmap.width, scaledBitmap.height)
+        scaledBitmap.getPixels(
+            intValues,
+            0,
+            scaledBitmap.width,
+            0,
+            0,
+            scaledBitmap.width,
+            scaledBitmap.height
+        )
         var pixel = 0
         //iterate over each pixel and extract R, G, and B values. Add those values individually to the byte buffer.
         for (i in 0 until imageSize) {
@@ -43,8 +50,6 @@ object ModelProcessing {
         val outputFeature0: TensorBuffer = outputs.outputFeature0AsTensorBuffer
         val confidences = outputFeature0.floatArray
         // find the index of the class with the biggest confidence.
-
-        Log.d("Result", confidences.joinToString { it.toString() })
 
         model.close()
 
