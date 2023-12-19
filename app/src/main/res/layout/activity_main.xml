@@ -23,8 +23,8 @@
         android:contentDescription="@string/open_camera"
         android:scaleType="center"
         android:src="@drawable/camera"
-        app:elevation="12dp"
         app:backgroundTint="@color/gray"
+        app:elevation="12dp"
         app:layout_anchor="@id/bottomAppBar"
         app:maxImageSize="46dp"
         app:tint="@color/white" />
@@ -33,10 +33,10 @@
         android:id="@+id/bottomAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:elevation="6dp"
         android:layout_gravity="bottom"
         app:contentInsetEnd="0dp"
-        app:contentInsetStart="0dp">
+        app:contentInsetStart="0dp"
+        app:elevation="6dp">
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigationView"

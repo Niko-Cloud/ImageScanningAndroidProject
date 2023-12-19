@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_gravity="center_horizontal"
     android:gravity="center_horizontal"
+    android:orientation="vertical"
     tools:context=".ui.profile.ProfileFragment">
 
     <TextView
@@ -23,82 +23,82 @@
         android:layout_height="250dp"
         android:layout_margin="10dp"
         android:layout_marginTop="16dp"
+        android:src="@drawable/account_filled"
         app:civ_border_color="#3A1F1F"
-        app:civ_border_width="3dp"
-        android:src="@drawable/account_filled" />
+        app:civ_border_width="3dp" />
 
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="start"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:gravity="start"
         android:text="@string/made_by"
         android:textColor="?attr/colorPrimary"
-        android:layout_gravity="start"
         android:textSize="24sp"
-        android:textStyle="bold"
-        android:gravity="start"/>
+        android:textStyle="bold" />
 
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
         android:text="@string/app_maker_me"
         android:textColor="?attr/colorPrimary"
-        android:layout_gravity="start"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
         android:textSize="14sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
         android:text="@string/anov"
         android:textColor="?attr/colorPrimary"
-        android:layout_gravity="start"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
         android:textSize="14sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
         android:text="@string/bela"
         android:textColor="?attr/colorPrimary"
-        android:layout_gravity="start"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
         android:textSize="14sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
         android:text="@string/rifqi"
         android:textColor="?attr/colorPrimary"
-        android:layout_gravity="start"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
         android:textSize="14sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
         android:text="@string/ivan"
         android:textColor="?attr/colorPrimary"
-        android:layout_gravity="start"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
         android:textSize="14sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/sindi"
-        android:textColor="?attr/colorPrimary"
         android:layout_gravity="start"
         android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
+        android:text="@string/sindi"
+        android:textColor="?attr/colorPrimary"
         android:textSize="14sp" />
 
 </LinearLayout>

@@ -6,12 +6,12 @@ plugins {
 }
 
 android {
-    namespace = "com.ch2ps126.capstoneproject"
+    namespace = "com.ch2ps126.tutorin"
     compileSdk = 34
 
 
     defaultConfig {
-        applicationId = "com.ch2ps126.capstoneproject"
+        applicationId = "com.ch2ps126.tutorin"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

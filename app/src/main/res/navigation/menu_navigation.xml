@@ -7,22 +7,22 @@
 
     <fragment
         android:id="@+id/menu_home"
-        android:name="com.ch2ps126.capstoneproject.ui.home.HomeFragment"
+        android:name="com.ch2ps126.tutorin.ui.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/menu_settings"
-        android:name="com.ch2ps126.capstoneproject.ui.settings.SettingsFragment"
+        android:name="com.ch2ps126.tutorin.ui.settings.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
     <fragment
         android:id="@+id/menu_profile"
-        android:name="com.ch2ps126.capstoneproject.ui.profile.ProfileFragment"
+        android:name="com.ch2ps126.tutorin.ui.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/menu_bookmark"
-        android:name="com.ch2ps126.capstoneproject.ui.bookmark.BookmarkFragment"
+        android:name="com.ch2ps126.tutorin.ui.bookmark.BookmarkFragment"
         android:label="fragment_bookmark"
         tools:layout="@layout/fragment_bookmark" />
 </navigation>
