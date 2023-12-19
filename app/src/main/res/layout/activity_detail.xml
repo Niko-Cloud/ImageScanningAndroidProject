@@ -112,20 +112,20 @@
             app:layout_constraintStart_toStartOf="@+id/cardView"
             app:layout_constraintTop_toBottomOf="@+id/tv_description_detail" />
 
-        <TextView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/tv_how_to_use"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:justificationMode="inter_word"
             android:lineSpacingExtra="2dp"
-            android:padding="8dp"
+            android:padding="4dp"
             android:textColor="?attr/colorPrimary"
             android:textSize="14sp"
+            android:isScrollContainer="false"
             android:textStyle="normal"
             app:layout_constraintEnd_toEndOf="@+id/tv_description_detail"
             app:layout_constraintStart_toStartOf="@+id/tv_how_title"
             app:layout_constraintTop_toBottomOf="@+id/tv_how_title"
-            tools:text="Hey guys, did you know that in terms of male human and female Pokémon breeding, Vaporeon is the most compatible Pokémon for humans? Not only are they in the field egg group, which is mostly comprised of mammals, Vaporeon are an average of 3'03'" />
+            tools:listitem="@layout/how_to_use_item"/>
 
         <TextView
             android:id="@+id/tv_link_video"
