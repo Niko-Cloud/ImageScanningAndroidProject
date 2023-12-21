@@ -36,8 +36,6 @@ class CameraActivity : AppCompatActivity() {
         FILENAME_FORMAT, Locale.US
     ).format(Date())
     private var currentImageUri: Uri? = null
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCameraBinding.inflate(layoutInflater)
