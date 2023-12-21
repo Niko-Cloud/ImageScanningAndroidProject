@@ -27,7 +27,8 @@
             android:layout_marginTop="20dp"
             android:src="@drawable/back_button"
             app:layout_constraintStart_toStartOf="@+id/cardView"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/back_button" />
 
         <ImageView
             android:id="@+id/iv_bookmark"
@@ -37,7 +38,8 @@
 
             android:src="@drawable/bookmark_button_outline"
             app:layout_constraintEnd_toEndOf="@+id/cardView"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/bookmark_button" />
 
         <TextView
             android:id="@+id/tv_title"
@@ -55,9 +57,11 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView"
-            android:layout_width="350dp"
+            android:layout_width="match_parent"
             android:layout_height="250dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
             app:cardCornerRadius="55dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -68,7 +72,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                tools:src="@tools:sample/backgrounds/scenic" />
+                tools:src="@tools:sample/backgrounds/scenic"
+                android:contentDescription="@string/tools_image" />
         </androidx.cardview.widget.CardView>
 
         <TextView
@@ -76,6 +81,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingStart="8dp"
+            android:paddingEnd="8dp"
             android:text="@string/description"
             android:textAlignment="center"
             android:textColor="?attr/colorPrimary"
@@ -105,6 +111,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:paddingStart="8dp"
+            android:paddingEnd="8dp"
             android:text="@string/how_to_use"
             android:textColor="?attr/colorPrimary"
             android:textSize="24sp"
@@ -118,7 +125,7 @@
             android:layout_height="wrap_content"
             android:isScrollContainer="false"
             android:lineSpacingExtra="2dp"
-            android:padding="4dp"
+            android:padding="8dp"
             android:textColor="?attr/colorPrimary"
             android:textSize="14sp"
             android:textStyle="normal"

@@ -109,17 +109,17 @@ class HomeFragment : Fragment() {
             homeViewModel.equipmentData.observe(viewLifecycleOwner) { equipmentResponse ->
                 equipmentResponse?.let {
                     homeAdapter.submitList(it)
+                    if (it.isEmpty()) {
+                        binding.tvNotFound.visibility = View.VISIBLE
+                    } else {
+                        binding.tvNotFound.visibility = View.GONE
+                    }
                 }
             }
         }
 
         homeViewModel.searchQuery.observe(viewLifecycleOwner) {
             homeViewModel.filterEquipment()
-            if (it.isEmpty()) {
-                binding.tvNotFound.visibility = View.GONE
-            } else {
-                binding.tvNotFound.visibility = View.VISIBLE
-            }
         }
 
         homeViewModel.muscleTypes.observe(viewLifecycleOwner) {
